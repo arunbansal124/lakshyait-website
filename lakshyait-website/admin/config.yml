@@ -1,0 +1,52 @@
+backend:
+  name: github
+  repo: arunbansal124/lakshyait-website
+  branch: main
+
+media_folder: "assets/images"
+public_folder: "/assets/images"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - name: "home"
+        label: "Home Page"
+        file: "index.html"
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
+          - { label: "Stat 1 Number", name: "stat1_num", widget: "string" }
+          - { label: "Stat 1 Label", name: "stat1_label", widget: "string" }
+          - { label: "Stat 2 Number", name: "stat2_num", widget: "string" }
+          - { label: "Stat 2 Label", name: "stat2_label", widget: "string" }
+          - { label: "Stat 3 Number", name: "stat3_num", widget: "string" }
+          - { label: "Stat 3 Label", name: "stat3_label", widget: "string" }
+          - { label: "Stat 4 Number", name: "stat4_num", widget: "string" }
+          - { label: "Stat 4 Label", name: "stat4_label", widget: "string" }
+
+      - name: "about"
+        label: "About Page"
+        file: "about.html"
+        fields:
+          - { label: "Page Title", name: "title", widget: "string" }
+          - { label: "Mission Text", name: "mission", widget: "text" }
+          - { label: "Vision Text", name: "vision", widget: "text" }
+
+      - name: "services"
+        label: "Services Page"
+        file: "services.html"
+        fields:
+          - { label: "Page Title", name: "title", widget: "string" }
+          - { label: "Page Subtitle", name: "subtitle", widget: "string" }
+
+  - name: "projects"
+    label: "Projects"
+    folder: "_projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Project Name", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Technologies", name: "tech", widget: "list" }
