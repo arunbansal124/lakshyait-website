@@ -1,7 +1,5 @@
 backend:
-  name: github
-  repo: arunbansal124/lakshyait-website
-  branch: main
+  name: test-repo
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
