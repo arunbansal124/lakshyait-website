@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LakshyaIT Blog - Tech insights, tutorials, and industry news.">
+    <title>LakshyaIT Blog - Tech Insights & Stories</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Lakshya<span>Blog</span></a>
+                <nav class="nav">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+                <button class="mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to LakshyaIT Blog</h1>
+            <p>Discover the latest in technology, tutorials, and industry insights</p>
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Search articles...">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ad Space - Top Banner -->
+    <div class="ad-container">
+        <div class="ad-banner">
+            <p>Advertisement</p>
+            <!-- Your Google AdSense code goes here -->
+            <div class="ad-placeholder">728x90 Banner Ad</div>
+        </div>
+    </div>
+
+    <!-- Featured Posts -->
+    <section class="featured-section">
+        <div class="container">
+            <h2 class="section-title">Featured Posts</h2>
+            <div id="featured-posts" class="featured-grid">
+                <div class="loading">Loading posts...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Posts -->
+    <section class="posts-section">
+        <div class="container">
+            <div class="posts-layout">
+                <!-- Main Posts -->
+                <div class="posts-main">
+                    <h2 class="section-title">Latest Articles</h2>
+                    <div id="posts-container" class="posts-grid">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- Ad Space - Sidebar -->
+                    <div class="sidebar-widget ad-widget">
+                        <p>Advertisement</p>
+                        <div class="ad-placeholder">300x250 Ad</div>
+                        <!-- Your Google AdSense code goes here -->
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="sidebar-widget">
+                        <h3>Categories</h3>
+                        <div id="categories-list" class="categories-list">
+                            <a href="#" onclick="filterByCategory('Technology')">Technology</a>
+                            <a href="#" onclick="filterByCategory('Tutorials')">Tutorials</a>
+                            <a href="#" onclick="filterByCategory('Case Studies')">Case Studies</a>
+                            <a href="#" onclick="filterByCategory('Industry News')">Industry News</a>
+                            <a href="#" onclick="filterByCategory('All')">All Posts</a>
+                        </div>
+                    </div>
+
+                    <!-- Ad Space - Sidebar Bottom -->
+                    <div class="sidebar-widget ad-widget">
+                        <p>Advertisement</p>
+                        <div class="ad-placeholder">300x600 Ad</div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin FAB -->
+    <button class="admin-fab" id="admin-fab" onclick="showAdminLogin()">
+        <i class="fas fa-user-shield"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Lakshya<span>Blog</span></h3>
+                    <p>Your source for tech insights and innovation</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LakshyaIT Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

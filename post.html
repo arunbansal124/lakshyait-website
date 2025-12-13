@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog post">
+    <title>Post - LakshyaIT Blog</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .post-header {
+            padding: 8rem 0 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
+        }
+        .post-header .post-category {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .post-header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-header .post-meta {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        
+        .post-image-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        .post-image-container img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .post-content-wrapper {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        .post-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        .post-content h2 {
+            font-size: 2rem;
+            margin: 2.5rem 0 1rem;
+            color: var(--primary);
+        }
+        .post-content h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--text);
+        }
+        .post-content p {
+            margin-bottom: 1.5rem;
+        }
+        .post-content ul, .post-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .post-content li {
+            margin-bottom: 0.8rem;
+        }
+        .post-content img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        .post-content code {
+            background: var(--surface);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        .post-content pre {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin: 2rem 0;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .ad-post-bottom {
+            text-align: center;
+            padding: 3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Lakshya<span>Blog</span></a>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+                <button class="mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading">Loading post...</div>
+
+    <!-- Post Content -->
+    <div id="post-container" style="display:none;">
+        <div class="post-header">
+            <div class="container">
+                <a href="index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Blog
+                </a>
+                <div id="post-category" class="post-category"></div>
+                <h1 id="post-title"></h1>
+                <div id="post-meta" class="post-meta"></div>
+            </div>
+        </div>
+
+        <div id="post-image-container" class="post-image-container" style="display:none;">
+            <img id="post-image" src="" alt="">
+        </div>
+
+        <!-- Ad Space -->
+        <div class="ad-container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">728x90 In-Post Ad</div>
+            </div>
+        </div>
+
+        <div class="post-content-wrapper">
+            <article id="post-content" class="post-content"></article>
+            
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Blog
+            </a>
+        </div>
+
+        <!-- Bottom Ad -->
+        <div class="ad-post-bottom">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">728x90 Bottom Ad</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin FAB -->
+    <button class="admin-fab" id="admin-fab" onclick="showAdminLogin()">
+        <i class="fas fa-user-shield"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Lakshya<span>Blog</span></h3>
+                    <p>Your source for tech insights and innovation</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LakshyaIT Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

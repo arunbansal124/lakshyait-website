@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LakshyaIT Blog</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .admin-container { max-width: 1400px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
+        .admin-header h1 { font-size: 2.5rem; color: var(--primary); }
+        .btn { padding: 0.8rem 1.8rem; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        
+        .editor-container { background: var(--surface); padding: 3rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 3rem; }
+        .form-group { margin-bottom: 2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 1rem; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 12px; color: var(--text); font: inherit; font-size: 1rem;
+        }
+        .form-group textarea { min-height: 500px; font-family: 'Monaco', monospace; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .posts-list { margin-top: 3rem; }
+        .post-item {
+            background: var(--surface); padding: 2rem; margin-bottom: 1.5rem; border-radius: 16px;
+            border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+        }
+        .post-item-info h3 { color: var(--text); margin-bottom: 0.5rem; }
+        .post-item-info p { color: var(--text-muted); font-size: 0.9rem; }
+        .post-actions { display: flex; gap: 1rem; }
+        
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border); transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(24px); }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <div style="display:flex;gap:1rem;">
+                <a href="index.html" class="btn btn-primary">View Blog</a>
+                <button class="btn btn-danger" onclick="logoutAdmin()">Logout</button>
+            </div>
+        </div>
+
+        <div class="editor-container" id="editor-section">
+            <h2 id="editor-title" style="margin-bottom:2rem;">Create New Post</h2>
+            
+            <div class="form-group">
+                <label>Title *</label>
+                <input type="text" id="title" placeholder="Enter post title...">
+            </div>
+
+            <div class="form-group">
+                <label>URL Slug (auto-generated)</label>
+                <input type="text" id="slug" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category">
+                    <option value="Technology">Technology</option>
+                    <option value="Tutorials">Tutorials</option>
+                    <option value="Case Studies">Case Studies</option>
+                    <option value="Industry News">Industry News</option>
+                    <option value="Company Updates">Company Updates</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Featured Image URL</label>
+                <input type="url" id="image_url" placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="form-group">
+                <label>Excerpt (Short description, max 200 chars)</label>
+                <textarea id="excerpt" rows="3" maxlength="200"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Content (HTML supported) *</label>
+                <textarea id="content" placeholder="Write your post content here..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Author</label>
+                <input type="text" id="author" value="LakshyaIT">
+            </div>
+
+            <div class="form-group">
+                <label style="display:flex;align-items:center;gap:1rem;">
+                    <span>Published</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="published" checked>
+                        <span class="slider"></span>
+                    </label>
+                </label>
+            </div>
+
+            <button class="btn btn-primary" onclick="savePost()" style="width:100%;font-size:1.1rem;">
+                <i class="fas fa-save"></i> Save Post
+            </button>
+        </div>
+
+        <div class="posts-list">
+            <h2 style="margin-bottom:2rem;color:var(--text);">All Posts</h2>
+            <div id="posts-list-container">Loading...</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
