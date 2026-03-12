@@ -10,13 +10,25 @@ let isAdmin = sessionStorage.getItem('blog_admin') === 'true';
 
 // Load Supabase
 async function loadSupabase() {
-    if (window.supabase) return;
+    // If already initialised, just make sure module-level var is set
+    if (supabase) return;
+    if (window._supabaseClient) {
+        supabase = window._supabaseClient;
+        return;
+    }
+    // If library already on page but client not created yet
+    if (window.supabase && window.supabase.createClient) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        window._supabaseClient = supabase;
+        return;
+    }
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js';
         script.onload = () => {
             if (window.supabase && window.supabase.createClient) {
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                window._supabaseClient = supabase;
                 console.log('Supabase loaded successfully');
                 resolve();
             } else {
