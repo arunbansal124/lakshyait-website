@@ -2,8 +2,15 @@
 
 let messages = [];
 
+// Make sure Supabase is loaded
+async function ensureSupabase() {
+    if (!window.supabase) {
+        await loadSupabase();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadSupabase();
+    await ensureSupabase();
     
     // Check if admin
     const isAdminMode = sessionStorage.getItem('blog_admin') === 'true';
