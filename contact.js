@@ -100,7 +100,7 @@ function setupContactForm() {
             if (!contactDb) throw new Error('Database not initialised');
 
             const { data, error } = await contactDb
-                .from('contact_messages')
+                .from('contact_message')
                 .insert([formData])
                 .select();
 
@@ -123,7 +123,7 @@ async function loadMessages() {
     try {
         if (!contactDb) await initContactDb();
         const { data, error } = await contactDb
-            .from('contact_messages')
+            .from('contact_message')
             .select('*')
             .order('created_at', { ascending: false });
 
@@ -240,7 +240,7 @@ window.sendReply = function () {
 window.deleteMessage = async function (id) {
     if (!confirm('Delete this message?')) return;
     try {
-        const { error } = await contactDb.from('contact_messages').delete().eq('id', id);
+        const { error } = await contactDb.from('contact_message').delete().eq('id', id);
         if (error) throw error;
         messages = messages.filter(m => m.id !== id);
         updateInboxCount();
