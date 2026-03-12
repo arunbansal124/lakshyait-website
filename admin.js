@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Check admin auth
     if (sessionStorage.getItem('blog_admin') !== 'true') {
         alert('Access denied. Please log in as admin.');
-        window.location.href = 'index.html';
+        window.location.href = '../index.html';
         return;
     }
 
@@ -111,7 +111,7 @@ async function loadPostForEditing(id) {
 }
 
 window.editPost = async function(id) {
-    window.location.href = `admin.html?edit=${id}`;
+    window.location.href = `posts.html?edit=${id}`;
 };
 
 window.savePost = async function() {
@@ -205,6 +205,15 @@ function resetForm() {
     document.getElementById('author').value = 'LakshyaIT';
     document.getElementById('published').checked = true;
 }
+
+function logoutAdmin() {
+    sessionStorage.removeItem('blog_admin');
+    localStorage.removeItem('blog_admin_remember');
+    window.location.href = 'login.html';
+}
+
+// Stub so script.js doesn't throw on admin pages
+async function loadEdits() {}
 
 function formatDate(dateStr) {
     const date = new Date(dateStr);
