@@ -232,11 +232,34 @@ window.logoutAdmin = function() {
 };
 
 function updateAdminUI() {
-    // No FAB - admin access via admin/login.html
     if (isAdmin) {
         console.log('Admin mode active');
     }
 }
+
+// Auto-logout when navigating back/forward to public pages from admin
+(function() {
+    const isAdminPage = window.location.pathname.includes('/admin/');
+    if (!isAdminPage) {
+        // On a public page — clear any admin session
+        sessionStorage.removeItem('blog_admin');
+        localStorage.removeItem('blog_admin_remember');
+        isAdmin = false;
+    }
+
+    // Also handle popstate (browser back/forward)
+    window.addEventListener('popstate', function() {
+        const stillAdmin = window.location.pathname.includes('/admin/');
+        if (!stillAdmin) {
+            sessionStorage.removeItem('blog_admin');
+            localStorage.removeItem('blog_admin_remember');
+            isAdmin = false;
+        }
+    });
+})();
+
+// Stub - overridden by admin.js when on admin pages
+async function loadEdits() {}
 
 // Utility Functions
 function formatDate(dateStr) {
