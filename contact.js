@@ -2,28 +2,29 @@
 
 let messages = [];
 
-// Make sure Supabase is loaded
-async function ensureSupabase() {
-    if (!window.supabase) {
-        await loadSupabase();
-    }
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
-    await ensureSupabase();
+    await loadSupabase();
     
-    // Check if admin
     const isAdminMode = sessionStorage.getItem('blog_admin') === 'true';
-    
-    if (isAdminMode) {
-        document.body.classList.add('admin-mode');
-        document.getElementById('admin-inbox').style.display = 'block';
+    const onContactPage = !!document.getElementById('contact-form');
+    const onMessagesPage = !!document.getElementById('inbox-content') && !onContactPage;
+
+    if (onMessagesPage) {
+        // We're on admin/messages.html
         await loadMessages();
         showInbox();
+        return;
     }
-    
-    // Setup form submission
-    setupContactForm();
+
+    if (onContactPage) {
+        if (isAdminMode) {
+            document.body.classList.add('admin-mode');
+            document.getElementById('admin-inbox').style.display = 'block';
+            await loadMessages();
+            showInbox();
+        }
+        setupContactForm();
+    }
 });
 
 function setupContactForm() {
@@ -36,7 +37,7 @@ function setupContactForm() {
         const formData = {
             name: form.name.value.trim(),
             email: form.email.value.trim(),
-            company: form.company.value.trim() || null,
+            company: form.company ? form.company.value.trim() || null : null,
             message: form.message.value.trim(),
             replied: false,
             created_at: new Date().toISOString()
@@ -52,7 +53,6 @@ function setupContactForm() {
             alert('✅ Message sent successfully! We\'ll get back to you soon.');
             form.reset();
             
-            // If admin, reload messages
             if (sessionStorage.getItem('blog_admin') === 'true') {
                 await loadMessages();
                 showInbox();
@@ -88,20 +88,25 @@ function updateInboxCount() {
 }
 
 window.showInbox = function() {
-    setActiveTab('inbox-tab');
+    // Highlight active tab if tabs exist
+    document.querySelectorAll('.admin-tabs button').forEach((btn, i) => {
+        btn.classList.toggle('active', i === 0);
+    });
+
     const container = document.getElementById('inbox-content');
+    if (!container) return;
     
     if (!messages || messages.length === 0) {
         container.innerHTML = `
             <div style="text-align:center;padding:3rem;color:var(--text-muted);">
-                <i class="fas fa-inbox" style="font-size:3rem;margin-bottom:1rem;opacity:0.5;"></i>
+                <i class="fas fa-inbox" style="font-size:3rem;margin-bottom:1rem;opacity:0.5;display:block;"></i>
                 <p>No messages yet.</p>
             </div>
         `;
         return;
     }
     
-    container.innerHTML = messages.map((msg, index) => `
+    container.innerHTML = messages.map((msg) => `
         <div class="message-card ${msg.replied ? 'replied' : ''}">
             <div class="message-header">
                 <div>
@@ -127,11 +132,15 @@ window.showInbox = function() {
 };
 
 window.showCompose = function() {
-    setActiveTab('compose-tab');
+    document.querySelectorAll('.admin-tabs button').forEach((btn, i) => {
+        btn.classList.toggle('active', i === 1);
+    });
+
     const container = document.getElementById('inbox-content');
+    if (!container) return;
     
     container.innerHTML = `
-        <div class="contact-form" style="display:block;">
+        <div style="background:var(--surface);padding:2rem;border-radius:var(--radius-lg);border:1px solid var(--border);">
             <div class="form-group">
                 <label for="reply-to">To (Email)</label>
                 <input type="email" id="reply-to" placeholder="recipient@example.com">
@@ -144,11 +153,11 @@ window.showCompose = function() {
                 <label for="reply-body">Message</label>
                 <textarea id="reply-body" rows="8" placeholder="Write your reply..."></textarea>
             </div>
-            <button class="submit-btn" onclick="sendReply()">
+            <button class="submit-btn" onclick="sendReply()" style="width:100%;padding:1.2rem;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;border:none;border-radius:var(--radius-full);font-size:1.1rem;font-weight:700;cursor:pointer;">
                 <i class="fas fa-paper-plane"></i> Send Reply
             </button>
             <p style="margin-top:1rem;color:var(--text-muted);font-size:0.9rem;text-align:center;">
-                <i class="fas fa-info-circle"></i> Note: This will copy the email content. Send it from your email client.
+                <i class="fas fa-info-circle"></i> This will copy the email content. Send it from your email client.
             </p>
         </div>
     `;
@@ -157,23 +166,25 @@ window.showCompose = function() {
 window.replyToMessage = function(id, email, name) {
     showCompose();
     setTimeout(() => {
-        document.getElementById('reply-to').value = email;
-        document.getElementById('reply-subject').value = `Re: Your message to LakshyaIT`;
-        document.getElementById('reply-body').value = `Hi ${name},\n\n\n\nBest regards,\nLakshyaIT Team`;
+        const toEl = document.getElementById('reply-to');
+        const subEl = document.getElementById('reply-subject');
+        const bodyEl = document.getElementById('reply-body');
+        if (toEl) toEl.value = email;
+        if (subEl) subEl.value = `Re: Your message to LakshyaIT`;
+        if (bodyEl) bodyEl.value = `Hi ${name},\n\n\n\nBest regards,\nLakshyaIT Team`;
     }, 100);
 };
 
 window.sendReply = function() {
-    const to = document.getElementById('reply-to').value;
-    const subject = document.getElementById('reply-subject').value;
-    const body = document.getElementById('reply-body').value;
+    const to = document.getElementById('reply-to')?.value;
+    const subject = document.getElementById('reply-subject')?.value;
+    const body = document.getElementById('reply-body')?.value;
     
     if (!to || !subject || !body) {
         alert('Please fill in all fields');
         return;
     }
     
-    // Copy to clipboard
     const emailContent = `To: ${to}\nSubject: ${subject}\n\n${body}`;
     navigator.clipboard.writeText(emailContent).then(() => {
         alert('✅ Email content copied to clipboard! Now send it from your email client.');
@@ -193,21 +204,14 @@ window.deleteMessage = async function(id) {
         
         if (error) throw error;
         
-        alert('✅ Message deleted');
-        await loadMessages();
+        messages = messages.filter(m => m.id !== id);
+        updateInboxCount();
         showInbox();
     } catch (err) {
         console.error('Error deleting message:', err);
         alert('❌ Failed to delete message');
     }
 };
-
-function setActiveTab(tabId) {
-    document.querySelectorAll('.admin-tabs button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    document.getElementById(tabId)?.classList.add('active');
-}
 
 function formatDate(dateStr) {
     const date = new Date(dateStr);
