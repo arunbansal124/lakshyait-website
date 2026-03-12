@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        .admin-container { max-width: 1400px; margin: 0 auto; padding: 6rem 2rem 4rem; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
-        .admin-header h1 { font-size: 2.5rem; color: var(--primary); }
-        .btn { padding: 0.8rem 1.8rem; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
+        .admin-container { max-width: 1400px; margin: 0 auto; padding: 8rem 2rem 4rem; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+        .admin-header h1 { font-size: 2.5rem; color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+        .admin-header p { color: var(--text-muted); font-size: 1.1rem; margin-top: 0.3rem; }
+        .btn { padding: 0.8rem 1.8rem; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
         .btn-danger { background: var(--danger); color: white; }
@@ -52,13 +53,28 @@
     </style>
 </head>
 <body>
+    <!-- Header - matching other admin pages -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Lakshya<span>Blog</span></a>
+                <nav class="nav">
+                    <a href="dashboard.html">← Dashboard</a>
+                    <a href="../index.html" target="_blank">View Site</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Admin Dashboard</h1>
-            <div style="display:flex;gap:1rem;">
-                <a href="../index.html" class="btn btn-primary">View Blog</a>
-                <button class="btn btn-danger" onclick="logoutAdmin()">Logout</button>
+            <div>
+                <h1>Manage Posts</h1>
+                <p>Create, edit and delete blog posts</p>
             </div>
+            <button class="btn btn-danger" onclick="logoutAdmin()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
         <div class="editor-container" id="editor-section">
