@@ -95,13 +95,15 @@ async function loadPosts() {
         console.log('Posts loaded:', data);
         allPosts = data || [];
         
-        // Show featured posts (latest 3)
-        if (document.getElementById('featured-posts')) {
-            renderFeaturedPosts(allPosts.slice(0, 3));
+        // Show only the single latest post in the "Latest Article" section
+        if (document.getElementById('posts-container')) {
+            renderPosts(allPosts.slice(0, 1));
         }
-        
-        // Show all posts
-        renderPosts(allPosts);
+
+        // Show ALL posts in the "All Articles" section
+        if (document.getElementById('featured-posts')) {
+            renderFeaturedPosts(allPosts);
+        }
     } catch (err) {
         console.error('Error loading posts:', err);
         showError('posts-container');
@@ -171,14 +173,10 @@ function setupSearch() {
     });
 }
 
-// Filter by Category
+// Filter by Category - only affects All Articles grid
 window.filterByCategory = function(category) {
-    if (category === 'All') {
-        renderPosts(allPosts);
-    } else {
-        const filtered = allPosts.filter(post => post.category === category);
-        renderPosts(filtered);
-    }
+    const filtered = category === 'All' ? allPosts : allPosts.filter(post => post.category === category);
+    renderFeaturedPosts(filtered);
 };
 
 // Load Single Post
