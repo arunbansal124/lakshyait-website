@@ -245,7 +245,18 @@ async function main() {
   console.log('\n✅ Done! Check your email to review and approve posts.');
 }
 
-main().catch(err => {
-  console.error('❌ Fatal error:', err);
-  process.exit(1);
-});
+async function main() {
+  console.log('🚀 Starting Diagnostic Test...');
+  
+  try {
+    // This part asks Google: "What models can I actually use?"
+    const result = await genAI.listModels();
+    console.log('✅ Connection Successful! Available models:');
+    result.models.forEach(m => console.log(`   - ${m.name}`));
+  } catch (err) {
+    console.error('❌ Diagnostic Failed:', err.message);
+  }
+
+  // Stop here so we can read the logs
+  process.exit(0);
+}
