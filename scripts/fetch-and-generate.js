@@ -7,10 +7,7 @@ import fetch from 'node-fetch';
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // FIXED: Added { apiVersion: 'v1' } to resolve the 404 error
-const model = genAI.getGenerativeModel(
-  { model: 'gemini-1.5-flash' },
-  { apiVersion: 'v1' }
-);
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
