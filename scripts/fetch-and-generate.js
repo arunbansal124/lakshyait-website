@@ -176,7 +176,7 @@ function buildEmailHtml(posts) {
 
 async function sendReviewEmail(posts) {
   const { data, error } = await resend.emails.send({
-    from: 'LakshyaIT News <news@lakshyait.com>',
+    from: 'LakshyaIT News <news@lakshya.sbs>',
     to: process.env.REVIEW_EMAIL,
     subject: `📰 Daily News Review — ${new Date().toLocaleDateString('en-IN')} (${posts.length} posts)`,
     html: buildEmailHtml(posts),
