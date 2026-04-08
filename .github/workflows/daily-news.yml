@@ -19,7 +19,9 @@ jobs:
           node-version: '22' # FIXED: Changed from '20' to '22'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install @google/generative-ai@latest  # Force update this specific package
 
       - name: Fetch news & generate posts
         env:
