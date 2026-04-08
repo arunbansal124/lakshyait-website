@@ -87,6 +87,15 @@ Respond ONLY in this exact JSON format (no markdown, no extra text, no backticks
   const clean = text.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 }
+  for (const { article, category } of allArticles) {
+    console.log(`   Writing: "${article.title.slice(0, 60)}..."`);
+    const post = await generatePost(article, category);
+    
+    // ADD THIS LINE to attach the image from the news article:
+    post.image_url = article.urlToImage; 
+    
+    generatedPosts.push(post);
+  }
 
 // ─── Step 3: Save drafts to Supabase ────────────────────────────────────────
 
@@ -102,6 +111,8 @@ async function saveDraft(post) {
       status: 'draft',
       source_url: post.source_url,
       source_name: post.source_name,
+      // ADD THIS LINE:
+      image_url: post.image_url || 'https://via.placeholder.com/1200x630?text=LakshyaIT+News', 
       auto_generated: true,
       created_at: new Date().toISOString(),
     })
@@ -111,7 +122,6 @@ async function saveDraft(post) {
   if (error) throw new Error(`Supabase insert error: ${JSON.stringify(error)}`);
   return data;
 }
-
 // ─── Step 4: Send Review Email ───────────────────────────────────────────────
 
 function buildEmailHtml(posts) {
