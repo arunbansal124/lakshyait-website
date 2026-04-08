@@ -3,8 +3,14 @@ import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import fetch from 'node-fetch';
 
+// Initialize APIs
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+// FIXED: Added { apiVersion: 'v1' } to resolve the 404 error
+const model = genAI.getGenerativeModel(
+  { model: 'gemini-1.5-flash' },
+  { apiVersion: 'v1' }
+);
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -150,15 +156,13 @@ function buildEmailHtml(posts) {
     <html>
     <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;margin:0;padding:32px 16px;">
       <div style="max-width:600px;margin:0 auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-        
         <div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);padding:32px;text-align:center;">
           <h1 style="color:white;margin:0;font-size:24px;font-family:Georgia,serif;">📰 LakshyaIT Daily News</h1>
           <p style="color:#bfdbfe;margin:8px 0 0;font-size:14px;">${date} — ${posts.length} posts ready for review</p>
         </div>
-
         <div style="padding:32px;">
           <p style="color:#475569;margin:0 0 24px;font-size:15px;">
-            Your AI-generated news posts are ready. Review each one below and click <strong>Approve</strong> to publish instantly to lakshya1.pages.dev.
+            Your AI-generated news posts are ready. Review each one below and click <strong>Approve</strong> to publish.
           </p>
           ${postCards}
           <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">
@@ -174,7 +178,7 @@ function buildEmailHtml(posts) {
 
 async function sendReviewEmail(posts) {
   const { data, error } = await resend.emails.send({
-    from: 'LakshyaIT News <news@lakshyait.com>',  // update with your verified domain
+    from: 'LakshyaIT News <news@lakshyait.com>', 
     to: process.env.REVIEW_EMAIL,
     subject: `📰 Daily News Review — ${new Date().toLocaleDateString('en-IN')} (${posts.length} posts)`,
     html: buildEmailHtml(posts),
@@ -205,13 +209,22 @@ async function main() {
     ...techArticles.map(a => ({ article: a, category: 'Technology' })),
   ];
 
+  if (allArticles.length === 0) {
+    console.log('\n🛑 No new articles found. Exiting.');
+    return;
+  }
+
   console.log('\n🤖 Generating blog posts with Gemini AI...');
   const generatedPosts = [];
 
   for (const { article, category } of allArticles) {
     console.log(`   Writing: "${article.title.slice(0, 60)}..."`);
-    const post = await generatePost(article, category);
-    generatedPosts.push(post);
+    try {
+        const post = await generatePost(article, category);
+        generatedPosts.push(post);
+    } catch (e) {
+        console.error(`   ❌ Error generating post for "${article.title}":`, e.message);
+    }
   }
 
   // 3. Save as drafts
@@ -224,8 +237,10 @@ async function main() {
   }
 
   // 4. Send review email
-  console.log('\n📧 Sending review email...');
-  await sendReviewEmail(savedPosts);
+  if (savedPosts.length > 0) {
+    console.log('\n📧 Sending review email...');
+    await sendReviewEmail(savedPosts);
+  }
 
   console.log('\n✅ Done! Check your email to review and approve posts.');
 }
