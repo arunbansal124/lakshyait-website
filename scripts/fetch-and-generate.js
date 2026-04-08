@@ -92,23 +92,24 @@ Respond ONLY in this exact JSON format (no markdown, no extra text, no backticks
 
 async function saveDraft(post) {
   const { data, error } = await supabase
-    .from('blog_posts')
-    .insert({
-      title: post.title,
-      slug: post.slug || slugify(post.title),
-      excerpt: post.excerpt,
-      content: post.content,
-      category: post.category,
-      status: 'draft',
-      source_url: post.source_url,
-      source_name: post.source_name,
-      // FIXED: Image URL included here
-      image_url: post.image_url || 'https://via.placeholder.com/1200x630?text=LakshyaIT+News', 
-      auto_generated: true,
-      created_at: new Date().toISOString(),
-    })
-    .select()
-    .single();
+  .from('blog_posts')
+  .upsert({
+    title: post.title,
+    slug: post.slug || slugify(post.title),
+    excerpt: post.excerpt,
+    content: post.content,
+    category: post.category,
+    status: 'draft',
+    source_url: post.source_url,
+    source_name: post.source_name,
+    image_url: post.image_url || 'https://via.placeholder.com/1200x630?text=LakshyaIT', 
+    auto_generated: true,
+    created_at: new Date().toISOString(),
+  }, { 
+    onConflict: 'slug'  // This tells Supabase to ignore duplicates based on the slug
+  })
+  .select()
+  .single();
 
   if (error) throw new Error(`Supabase insert error: ${JSON.stringify(error)}`);
   return data;
