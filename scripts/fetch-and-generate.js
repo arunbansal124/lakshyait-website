@@ -77,7 +77,7 @@ Respond ONLY in this exact JSON format (no markdown, no extra text, no backticks
 }`;
 
   const completion = await groq.chat.completions.create({
-    model: 'llama-3.3-70b-versatile',  // Best free Groq model
+    model: 'llama-3.3-70b-versatile',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.7,
     max_tokens: 1500,
@@ -87,15 +87,6 @@ Respond ONLY in this exact JSON format (no markdown, no extra text, no backticks
   const clean = text.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 }
-  for (const { article, category } of allArticles) {
-    console.log(`   Writing: "${article.title.slice(0, 60)}..."`);
-    const post = await generatePost(article, category);
-    
-    // ADD THIS LINE to attach the image from the news article:
-    post.image_url = article.urlToImage; 
-    
-    generatedPosts.push(post);
-  }
 
 // ─── Step 3: Save drafts to Supabase ────────────────────────────────────────
 
@@ -111,7 +102,7 @@ async function saveDraft(post) {
       status: 'draft',
       source_url: post.source_url,
       source_name: post.source_name,
-      // ADD THIS LINE:
+      // FIXED: Image URL included here
       image_url: post.image_url || 'https://via.placeholder.com/1200x630?text=LakshyaIT+News', 
       auto_generated: true,
       created_at: new Date().toISOString(),
@@ -122,6 +113,7 @@ async function saveDraft(post) {
   if (error) throw new Error(`Supabase insert error: ${JSON.stringify(error)}`);
   return data;
 }
+
 // ─── Step 4: Send Review Email ───────────────────────────────────────────────
 
 function buildEmailHtml(posts) {
@@ -168,7 +160,7 @@ function buildEmailHtml(posts) {
         </div>
         <div style="padding:32px;">
           <p style="color:#475569;margin:0 0 24px;font-size:15px;">
-            Your AI-generated news posts are ready. Review each one below and click <strong>Approve</strong> to publish instantly to lakshya1.pages.dev.
+            Your AI-generated news posts are ready. Review each one below and click <strong>Approve</strong> to publish.
           </p>
           ${postCards}
           <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">
@@ -219,6 +211,10 @@ async function main() {
   for (const { article, category } of allArticles) {
     console.log(`   Writing: "${article.title.slice(0, 60)}..."`);
     const post = await generatePost(article, category);
+    
+    // FIXED: Capturing the image from the article here
+    post.image_url = article.urlToImage; 
+    
     generatedPosts.push(post);
   }
 
