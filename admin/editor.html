@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Editor - LakshyaIT Admin</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .editor-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+        .editor-header { margin-bottom: 2rem; }
+        .editor-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .editor-header p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* Toolbar */
+        .editor-toolbar {
+            position: sticky;
+            top: 76px;
+            z-index: 100;
+            background: rgba(26,26,36,0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .toolbar-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 0.5rem;
+        }
+        .toolbar-btn {
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .toolbar-btn.save {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        .toolbar-btn.save:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .toolbar-btn.reset {
+            background: var(--surface);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        .toolbar-btn.reset:hover { background: var(--danger); color: white; }
+        .toolbar-btn.preview {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .toolbar-btn.preview:hover { border-color: var(--primary); color: var(--primary); }
+
+        .page-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .page-tab {
+            padding: 0.7rem 1.5rem;
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        .page-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: transparent;
+        }
+        .page-tab:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+
+        /* Edit frame */
+        .edit-frame-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+        .frame-header {
+            background: var(--bg-subtle);
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .frame-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .frame-dot.red { background: #ef4444; }
+        .frame-dot.yellow { background: #f59e0b; }
+        .frame-dot.green { background: #10b981; }
+        .frame-url {
+            margin-left: 1rem;
+            background: var(--bg);
+            color: var(--text-muted);
+            padding: 0.3rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            flex: 1;
+        }
+
+        /* Editable sections list */
+        .sections-list {
+            padding: 2rem;
+        }
+        .section-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .section-item:hover { border-color: var(--primary); }
+        .section-header {
+            padding: 1rem 1.5rem;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .section-header span {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .section-header i { color: var(--primary); margin-right: 0.5rem; }
+        .field-type {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-full);
+            background: rgba(99,102,241,0.15);
+            color: var(--primary);
+        }
+        .section-body { padding: 1.5rem; }
+        .editable-field {
+            width: 100%;
+            padding: 1rem;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1.6;
+            transition: var(--transition);
+            resize: vertical;
+        }
+        .editable-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+        textarea.editable-field { min-height: 100px; }
+
+        .save-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            z-index: 9999;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+        }
+        .save-toast.show { transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Lakshya<span>Blog</span></a>
+                <nav class="nav">
+                    <a href="dashboard.html">← Dashboard</a>
+                    <a href="../index.html" target="_blank">View Site</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="editor-container">
+        <div class="editor-header">
+            <h1>Page Editor</h1>
+            <p>Edit text content on any page. Changes are saved and applied live.</p>
+        </div>
+
+        <!-- Page Tabs -->
+        <div class="page-tabs">
+            <button class="page-tab active" onclick="loadPageFields('home')"><i class="fas fa-home"></i> Home</button>
+            <button class="page-tab" onclick="loadPageFields('about')"><i class="fas fa-info-circle"></i> About</button>
+            <button class="page-tab" onclick="loadPageFields('contact')"><i class="fas fa-envelope"></i> Contact</button>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="editor-toolbar">
+            <span class="toolbar-label"><i class="fas fa-edit"></i> Editing:</span>
+            <span id="editing-page-label" style="color:var(--text);font-weight:600;">Home Page</span>
+            <div style="flex:1;"></div>
+            <button class="toolbar-btn reset" onclick="resetPage()"><i class="fas fa-undo"></i> Reset to Default</button>
+            <button class="toolbar-btn save" onclick="saveChanges()"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+
+        <!-- Edit Fields Frame -->
+        <div class="edit-frame-wrapper">
+            <div class="frame-header">
+                <div class="frame-dot red"></div>
+                <div class="frame-dot yellow"></div>
+                <div class="frame-dot green"></div>
+                <span class="frame-url" id="frame-url">lakshya1.pages.dev/index.html</span>
+            </div>
+            <div class="sections-list" id="sections-list">
+                <!-- Fields rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="save-toast" id="save-toast"><i class="fas fa-check-circle"></i> Changes saved successfully!</div>
+
+    <script>
+        if (sessionStorage.getItem('blog_admin') !== 'true') {
+            window.location.href = 'login.html';
+        }
+        window.addEventListener('popstate', function() {
+            sessionStorage.removeItem('blog_admin');
+            localStorage.removeItem('blog_admin_remember');
+            window.location.href = 'login.html';
+        });
+
+        // Page content definitions
+        const pageDefinitions = {
+            home: {
+                label: 'Home Page',
+                url: 'lakshya1.pages.dev/index.html',
+                storageKey: 'page_edits_home',
+                fields: [
+                    { id: 'hero_title', label: 'Hero Title', type: 'text', icon: 'fa-heading', default: 'Welcome to LakshyaIT Blog' },
+                    { id: 'hero_subtitle', label: 'Hero Subtitle', type: 'text', icon: 'fa-align-left', default: 'Discover the latest in technology, tutorials, and industry insights' },
+                    { id: 'search_placeholder', label: 'Search Placeholder', type: 'text', icon: 'fa-search', default: 'Search articles...' },
+                    { id: 'featured_title', label: 'Featured Section Title', type: 'text', icon: 'fa-star', default: 'Featured Posts' },
+                    { id: 'latest_title', label: 'Latest Articles Title', type: 'text', icon: 'fa-newspaper', default: 'Latest Articles' },
+                    { id: 'footer_tagline', label: 'Footer Tagline', type: 'text', icon: 'fa-quote-left', default: 'Your source for tech insights and innovation' },
+                ]
+            },
+            about: {
+                label: 'About Page',
+                url: 'lakshya1.pages.dev/about.html',
+                storageKey: 'page_edits_about',
+                fields: [
+                    { id: 'about_hero_title', label: 'Hero Title', type: 'text', icon: 'fa-heading', default: 'About LakshyaIT Blog' },
+                    { id: 'about_hero_subtitle', label: 'Hero Subtitle', type: 'textarea', icon: 'fa-align-left', default: 'Your trusted source for cutting-edge technology insights, tutorials, and industry trends.' },
+                    { id: 'mission_title', label: 'Mission Section Title', type: 'text', icon: 'fa-bullseye', default: 'Our Mission' },
+                    { id: 'mission_p1', label: 'Mission Paragraph 1', type: 'textarea', icon: 'fa-paragraph', default: "At LakshyaIT, we're passionate about making technology accessible and understandable. Our mission is to empower developers, tech enthusiasts, and businesses with the knowledge they need to thrive in the digital age." },
+                    { id: 'mission_p2', label: 'Mission Paragraph 2', type: 'textarea', icon: 'fa-paragraph', default: 'We believe in sharing real-world insights, practical tutorials, and thought-provoking analysis that helps our readers stay ahead of the curve in an ever-evolving tech landscape.' },
+                    { id: 'stat_articles', label: 'Stat: Articles Published', type: 'text', icon: 'fa-chart-bar', default: '500+' },
+                    { id: 'stat_readers', label: 'Stat: Monthly Readers', type: 'text', icon: 'fa-chart-bar', default: '50K+' },
+                    { id: 'stat_years', label: 'Stat: Years of Excellence', type: 'text', icon: 'fa-chart-bar', default: '5+' },
+                    { id: 'stat_contributors', label: 'Stat: Expert Contributors', type: 'text', icon: 'fa-chart-bar', default: '10+' },
+                ]
+            },
+            contact: {
+                label: 'Contact Page',
+                url: 'lakshya1.pages.dev/contact.html',
+                storageKey: 'page_edits_contact',
+                fields: [
+                    { id: 'contact_hero_title', label: 'Hero Title', type: 'text', icon: 'fa-heading', default: 'Get In Touch' },
+                    { id: 'contact_hero_subtitle', label: 'Hero Subtitle', type: 'text', icon: 'fa-align-left', default: "Have a question or feedback? We'd love to hear from you." },
+                    { id: 'contact_form_name_label', label: 'Name Field Label', type: 'text', icon: 'fa-tag', default: 'Your Name *' },
+                    { id: 'contact_form_email_label', label: 'Email Field Label', type: 'text', icon: 'fa-tag', default: 'Email Address *' },
+                    { id: 'contact_form_message_label', label: 'Message Field Label', type: 'text', icon: 'fa-tag', default: 'Message *' },
+                    { id: 'contact_btn_text', label: 'Submit Button Text', type: 'text', icon: 'fa-mouse-pointer', default: 'Send Message' },
+                ]
+            }
+        };
+
+        let currentPage = 'home';
+
+        function loadPageFields(pageKey) {
+            currentPage = pageKey;
+            const def = pageDefinitions[pageKey];
+
+            // Update tabs
+            document.querySelectorAll('.page-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update toolbar
+            document.getElementById('editing-page-label').textContent = def.label;
+            document.getElementById('frame-url').textContent = def.url;
+
+            // Load saved values
+            const saved = JSON.parse(localStorage.getItem(def.storageKey) || '{}');
+
+            // Render fields
+            const container = document.getElementById('sections-list');
+            container.innerHTML = def.fields.map(field => `
+                <div class="section-item">
+                    <div class="section-header">
+                        <span><i class="fas ${field.icon}"></i> ${field.label}</span>
+                        <span class="field-type">${field.type === 'textarea' ? 'Long Text' : 'Short Text'}</span>
+                    </div>
+                    <div class="section-body">
+                        ${field.type === 'textarea'
+                            ? `<textarea class="editable-field" id="field_${field.id}" rows="3">${saved[field.id] !== undefined ? saved[field.id] : field.default}</textarea>`
+                            : `<input type="text" class="editable-field" id="field_${field.id}" value="${saved[field.id] !== undefined ? saved[field.id] : field.default}">`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveChanges() {
+            const def = pageDefinitions[currentPage];
+            const values = {};
+            def.fields.forEach(field => {
+                const el = document.getElementById('field_' + field.id);
+                if (el) values[field.id] = el.value;
+            });
+            localStorage.setItem(def.storageKey, JSON.stringify(values));
+
+            // Show toast
+            const toast = document.getElementById('save-toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function resetPage() {
+            if (!confirm('Reset all fields on this page to defaults?')) return;
+            const def = pageDefinitions[currentPage];
+            localStorage.removeItem(def.storageKey);
+            loadPageFields(currentPage);
+        }
+
+        // Initial load
+        loadPageFields('home');
+    </script>
+</body>
+</html>

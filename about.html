@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About LakshyaIT Blog - Your source for tech insights and innovation.">
+    <title>About - LakshyaIT Blog</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .about-hero {
+            padding: 12rem 0 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .about-hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+        .about-hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .about-section {
+            margin-bottom: 5rem;
+        }
+        .about-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            letter-spacing: -1px;
+        }
+        .about-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .feature-card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: var(--transition);
+        }
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+        .feature-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+        .feature-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+        
+        .stats-section {
+            background: var(--surface);
+            padding: 4rem 2rem;
+            border-radius: var(--radius-xl);
+            margin: 4rem 0;
+            border: 1px solid var(--border);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+        .stat-item h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .stat-item p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Lakshya<span>Blog</span></a>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="about.html" class="active">About</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+                <button class="mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>About LakshyaIT Blog</h1>
+            <p>Your trusted source for cutting-edge technology insights, tutorials, and industry trends.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="about-content">
+        <section class="about-section">
+            <h2>Our Mission</h2>
+            <p>At LakshyaIT, we're passionate about making technology accessible and understandable. Our mission is to empower developers, tech enthusiasts, and businesses with the knowledge they need to thrive in the digital age.</p>
+            <p>We believe in sharing real-world insights, practical tutorials, and thought-provoking analysis that helps our readers stay ahead of the curve in an ever-evolving tech landscape.</p>
+        </section>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3>Innovation First</h3>
+                <p>Covering the latest technologies and emerging trends before they become mainstream.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>In-Depth Tutorials</h3>
+                <p>Step-by-step guides and tutorials that help you master new skills.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Community Driven</h3>
+                <p>Built by developers, for developers. Real experiences, real solutions.</p>
+            </div>
+        </div>
+
+        <section class="about-section">
+            <h2>What We Cover</h2>
+            <p>Our content spans a wide range of technology topics including:</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2rem;">
+                <div style="background:var(--surface);padding:1.5rem;border-radius:var(--radius-md);border:1px solid var(--border);">
+                    <h4 style="color:var(--primary);margin-bottom:0.5rem;font-size:1.1rem;">💻 Software Development</h4>
+                    <p style="font-size:0.95rem;margin:0;">Web, mobile, and cloud development tutorials</p>
+                </div>
+                <div style="background:var(--surface);padding:1.5rem;border-radius:var(--radius-md);border:1px solid var(--border);">
+                    <h4 style="color:var(--secondary);margin-bottom:0.5rem;font-size:1.1rem;">🤖 AI & Machine Learning</h4>
+                    <p style="font-size:0.95rem;margin:0;">Latest advancements in artificial intelligence</p>
+                </div>
+                <div style="background:var(--surface);padding:1.5rem;border-radius:var(--radius-md);border:1px solid var(--border);">
+                    <h4 style="color:var(--accent);margin-bottom:0.5rem;font-size:1.1rem;">🔒 Cybersecurity</h4>
+                    <p style="font-size:0.95rem;margin:0;">Security best practices and threat analysis</p>
+                </div>
+                <div style="background:var(--surface);padding:1.5rem;border-radius:var(--radius-md);border:1px solid var(--border);">
+                    <h4 style="color:var(--success);margin-bottom:0.5rem;font-size:1.1rem;">☁️ Cloud & DevOps</h4>
+                    <p style="font-size:0.95rem;margin:0;">Infrastructure, automation, and scalability</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>500+</h3>
+                    <p>Articles Published</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50K+</h3>
+                    <p>Monthly Readers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>5+</h3>
+                    <p>Years of Excellence</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10+</h3>
+                    <p>Expert Contributors</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="about-section" style="text-align:center;">
+            <h2>Join Our Community</h2>
+            <p>Stay updated with the latest tech insights and join thousands of readers who trust LakshyaIT for their technology news and tutorials.</p>
+            <a href="contact.html" class="btn" style="background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:1rem 2.5rem;border-radius:50px;text-decoration:none;display:inline-block;margin-top:2rem;font-weight:600;">
+                Get In Touch
+            </a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Lakshya<span>Blog</span></h3>
+                    <p>Your source for tech insights and innovation</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="https://x.com" target="_blank" rel="noopener" title="X (Twitter)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.731-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://github.com/arunbansal124/lakshyait-website" target="_blank" rel="noopener" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LakshyaIT Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

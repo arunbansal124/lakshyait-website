@@ -1,0 +1,17 @@
+{
+  "name": "lakshyait-news-automation",
+  "version": "1.0.0",
+  "description": "Daily news automation for LakshyaIT Blog — powered by Groq AI",
+  "main": "scripts/fetch-and-generate.js",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/fetch-and-generate.js",
+    "test": "node scripts/fetch-and-generate.js"
+  },
+  "dependencies": {
+    "groq-sdk": "^0.7.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "node-fetch": "^3.3.2",
+    "resend": "^3.2.0"
+  }
+}
